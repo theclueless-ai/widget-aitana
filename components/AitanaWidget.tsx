@@ -10,7 +10,7 @@ const CLIPS: Record<State, string> = {
   hablando: "/clips/hablando.mp4",
 };
 
-export default function AitanaWidget({ lang = "es" }: { lang?: "es" | "en" }) {
+export default function AitanaWidget() {
   const [state, setState] = useState<State>("escuchando");
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -31,7 +31,7 @@ export default function AitanaWidget({ lang = "es" }: { lang?: "es" | "en" }) {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: next, lang }),
+        body: JSON.stringify({ messages: next }),
       });
       if (!res.body) throw new Error("sin stream");
 

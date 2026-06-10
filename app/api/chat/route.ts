@@ -11,9 +11,8 @@ type Msg = { role: "user" | "assistant"; content: string };
 const MAX_HISTORY = 20;
 
 export async function POST(req: Request) {
-  const { messages, lang = "es" } = (await req.json()) as {
+  const { messages } = (await req.json()) as {
     messages: Msg[];
-    lang?: "es" | "en";
   };
 
   // El modelo no tiene memoria entre llamadas: mandamos el historial,
@@ -28,7 +27,7 @@ export async function POST(req: Request) {
         const claude = anthropic.messages.stream({
           model: "claude-sonnet-4-6",
           max_tokens: 1024,
-          system: buildSystemPrompt(lang),
+          system: buildSystemPrompt(),
           messages: trimmed,
         });
 
