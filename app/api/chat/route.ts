@@ -39,8 +39,13 @@ export async function POST(req: Request) {
             controller.enqueue(encoder.encode(event.delta.text));
           }
         }
-      } catch {
-        controller.enqueue(encoder.encode("\n[error al generar respuesta]"));
+      } catch (err) {
+        // Log completo en el servidor (terminal de `npm run dev`) para diagnosticar.
+        console.error("[/api/chat] error al llamar a Claude:", err);
+        const detail = err instanceof Error ? err.message : String(err);
+        controller.enqueue(
+          encoder.encode(`\n[error al generar respuesta] ${detail}`),
+        );
       } finally {
         controller.close();
       }
